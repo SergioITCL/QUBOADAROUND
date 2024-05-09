@@ -1,0 +1,3 @@
+from itcl_quantizer.optimizers.minmax import MinMaxOptimizer
+from itcl_quantizer.optimizers.scipy_optimizer import ScipyOptimizer
+from itcl_quantizer.optimizers.fixed_percent import FixedPercentOptimizer

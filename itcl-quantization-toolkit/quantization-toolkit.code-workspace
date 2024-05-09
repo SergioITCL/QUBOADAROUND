@@ -1,0 +1,17 @@
+{
+  "folders": [
+    {
+      "path": "quantizer"
+    },
+    {
+      "path": "inference_engine"
+    },
+    {
+      "path": "core"
+    },
+    {
+      "path": "demo"
+    }
+  ],
+  "settings": {}
+}

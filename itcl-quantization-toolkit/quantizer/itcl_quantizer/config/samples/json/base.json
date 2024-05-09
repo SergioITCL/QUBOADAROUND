@@ -1,0 +1,30 @@
+{
+  "dense": {
+    "activation_dtype": "int8",
+    "bias_add_dtype": "int8",
+    "bias_dtype": "int32",
+    "kernel_dtype": "int8",
+    "kernel_symmetric": false,
+    "adaround_optimizer": null,
+    "lut_cfg": {
+      "reduced_depth": 3
+    }
+  },
+  "quantize": {
+    "dtype": "int8"
+  },
+  "dequantize": {},
+  "ada_round_net": {
+    "optimizer": "annealer",
+    "t_min": 0.1,
+    "t_max": 25000,
+    "updates": 100,
+    "steps": 5000,
+    "max_retries": 100
+  },
+  "param_equalizer": {
+    "optimizer": "base",
+    "max_retries": 100
+  },
+  "specific_layers": {}
+}

@@ -1,0 +1,37 @@
+[tool.poetry]
+name = "itcl_inference_engine"
+version = "0.1.0"
+description = "ITLC Inference Engine"
+authors = ["ITCL <jorge.ruiz@itcl.es>"] 
+packages = [{include = "itcl_inference_engine"}]
+
+
+[tool.poetry.dependencies]
+python = ">=3.10 <3.11"
+numpy = "^1.23.1"
+itcl-quantization-core = {path = "../core", develop = true}
+typing-extensions = "^4.3.0"
+tensorflow = "2.10"
+matplotlib = "^3.5.2"
+scikit-learn = "^1.1.3"
+tensorflow-io-gcs-filesystem = "0.31"
+
+
+[tool.poetry.dev-dependencies]
+black = "^22.6.0"
+pytest = "^7.1.2"
+ipython = "^8.4.0"
+ipykernel = "^6.15.1"
+pylint = "^2.14.5"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.2.0"
+pydocstyle = "^6.3.0"
+pylint = "^2.15.10"
+isort = "^5.11.4"
+black = "^22.12.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+

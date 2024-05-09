@@ -1,0 +1,49 @@
+[tool.poetry]
+name = "itcl_quantizer"
+version = "0.1.3"
+description = "Itcl Quantization Tool"
+authors = ["ITCL <itcl@itcl.es>"]
+packages = [{include = "itcl_quantizer"}]
+
+
+[tool.poetry.dependencies]
+python = ">=3.10,<3.11"
+tensorflow = "<=2.10.0"
+matplotlib = "^3.5.2"
+scipy = "^1.8.1"
+seaborn = "^0.11.2"
+simanneal = "^0.5.0"
+scikit-learn = "^1.1.1"
+numpy = "^1.23.1"
+pydantic = "^2"
+PyYAML = "^6.0"
+
+itcl-quantization-core = {path = "../core", develop = true}
+itcl-inference-engine = {path = "../inference_engine", develop = true}
+qiskit = "1.0"
+qiskit-aer = "0.13.3"
+qiskit-algorithms = "0.3"
+qiskit-optimization = "0.6"
+
+[tool.poetry.dev-dependencies]
+pytest = "^7.1.2"
+black = "^22.6.0"
+ipykernel = "^6.15.1"
+
+[tool.poetry.group.dev.dependencies]
+pyclean = "^2.2.0"
+pytest = "^7.2.0"
+flake8 = "^6.0.0"
+pylint = "^2.15.10"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.distutils.bdist_wheel]
+universal = true
+
+[tool.pytest.ini_options]
+pythonpath = [
+  "."
+]

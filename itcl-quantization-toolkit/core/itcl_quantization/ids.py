@@ -1,0 +1,44 @@
+from enum import Enum
+
+
+class LayerIds:
+    tanh = "TANH"
+    quantize = "QUANTIZE"
+    dequantize = "DEQUANTIZE"
+    fully_conn = "FULLY_CONNECTED"
+    lstm = "LSTM"
+
+
+class LSTMInputs:
+    INPUT = 0
+    KERNEL_INPUT = 1
+    KERNEL_FORGET = 2
+    KERNEL_CELL = 3
+    KERNEL_OUTPUT = 4
+    RECURRENT_INPUT = 5
+    RECURRENT_FORGET = 6
+    RECURRENT_CELL = 7
+    RECURRENT_OUTPUT = 8
+    BIAS_INPUT = 9
+    BIAS_FORGET = 10
+    BIAS_CELL = 11
+    BIAS_OUTPUT = 12
+    BIAS_ADD_INPUT = 13
+    BIAS_ADD_FORGET = 14
+    BIAS_ADD_CELL = 15
+    BIAS_ADD_OUTPUT = 16
+    RECURRENT_ADD_INPUT = 17
+    RECURRENT_ADD_FORGET = 18
+    RECURRENT_ADD_CELL = 19
+    RECURRENT_ADD_OUTPUT = 20
+    CELL_STATE = 21
+    INPUT_GATE_IN = 22
+    INPUT_GATE_OUT = 23
+    FORGET_GATE_IN = 24
+    FORGET_GATE_OUT = 25
+    CELL_GATE_IN = 26
+    CELL_GATE_OUT = 27
+    OUTPUT_GATE_IN = 28
+    OUTPUT_GATE_OUT = 29
+    CELL_STATE_ACT_IN = 30
+    CELL_STATE_ACT_OUT = 31

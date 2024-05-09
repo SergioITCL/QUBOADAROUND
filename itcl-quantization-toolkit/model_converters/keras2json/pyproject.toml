@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "keras2json"
+version = "0.1.0"
+description = "Model converter that generates a json with all the weights and params from an .h5 file"
+authors = ["ITCL"]
+
+[tool.poetry.dependencies]
+python = "~3.10"
+tensorflow = "^2.9.1"
+itcl-quantization-toolkit = { path = "../../core/", develop = true }
+
+
+[tool.poetry.dev-dependencies]
+black = "^22.6.0"
+
+[tool.poetry.group.dev.dependencies]
+ipykernel = "^6.19.2"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

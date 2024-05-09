@@ -1,0 +1,15 @@
+ada_round_net: null
+dense:
+  activation_dtype: int8
+  adaround_optimizer: null
+  bias_add_dtype: int8
+  bias_dtype: int32
+  kernel_dtype: int8
+  kernel_symmetric: true
+  lut_cfg:
+    reduced_depth: 3
+dequantize: {}
+param_equalizer: null
+quantize:
+  dtype: int8
+specific_layers: {}

@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "itcl-quantization-core"
+version = "0.1.0"
+description = ""
+authors = ["Jorge Ruiz <jorge.ruiz@itcl.es>"]
+readme = "readme.md"
+packages = [{include = "itcl_quantization"}]
+
+[tool.poetry.dependencies]
+python = ">=3.10,<3.11"
+numpy = "^1.24.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

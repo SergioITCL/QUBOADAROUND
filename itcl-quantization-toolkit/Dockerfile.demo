@@ -1,0 +1,15 @@
+FROM python:3.10-slim
+
+WORKDIR /repo
+
+RUN pip install poetry==1.4.0
+
+COPY ./ .
+
+WORKDIR /repo/demo
+
+RUN poetry config virtualenvs.in-project true
+
+RUN poetry install --no-dev
+
+CMD ["sleep", "infinity"]

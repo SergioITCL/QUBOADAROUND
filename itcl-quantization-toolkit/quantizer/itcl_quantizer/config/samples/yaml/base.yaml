@@ -1,0 +1,23 @@
+ada_round_net:
+  max_retries: 100
+  optimizer: annealer
+  steps: 5000
+  t_max: 25000
+  t_min: 0.1
+  updates: 100
+dense:
+  activation_dtype: int8
+  adaround_optimizer: null
+  bias_add_dtype: int8
+  bias_dtype: int32
+  kernel_dtype: int8
+  kernel_symmetric: false
+  lut_cfg:
+    reduced_depth: 3
+dequantize: {}
+param_equalizer:
+  max_retries: 100
+  optimizer: base
+quantize:
+  dtype: int8
+specific_layers: {}

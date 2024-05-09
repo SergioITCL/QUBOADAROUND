@@ -1,0 +1,6 @@
+---
+settings:
+  lut:
+    lut_depth: 3
+    min_removal: 0
+    asymmetric: False, 

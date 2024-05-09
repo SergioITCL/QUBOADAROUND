@@ -1,0 +1,20 @@
+{
+  "dense": {
+    "activation_dtype": "int8",
+    "bias_add_dtype": "int8",
+    "bias_dtype": "int32",
+    "kernel_dtype": "int8",
+    "kernel_symmetric": true,
+    "adaround_optimizer": null,
+    "lut_cfg": {
+      "reduced_depth": 3
+    }
+  },
+  "quantize": {
+    "dtype": "int8"
+  },
+  "dequantize": {},
+  "ada_round_net": null,
+  "param_equalizer": null,
+  "specific_layers": {}
+}
