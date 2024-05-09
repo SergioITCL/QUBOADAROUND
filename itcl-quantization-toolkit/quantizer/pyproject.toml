@@ -24,6 +24,11 @@ qiskit = "1.0"
 qiskit-aer = "0.13.3"
 qiskit-algorithms = "0.3"
 qiskit-optimization = "0.6"
+dimod = "^0.12.14"
+greedy = "^0.1.1"
+dwave-neal = "^0.6.0"
+dwave-system = "^1.24.0"
+dwave-inspector = "^0.5.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^7.1.2"
