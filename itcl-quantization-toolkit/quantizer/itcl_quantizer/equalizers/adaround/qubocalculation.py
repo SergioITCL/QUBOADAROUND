@@ -207,7 +207,7 @@ def Quantum_annealing_simulator(Diccionario,fuerza):
     
     solver = neal.SimulatedAnnealingSampler()
     result3 = solver.sample(problem)
-    
+    print(result3)
     '''
     solver = LeapHybridSampler(token=api_key)
     result4=solver.sample(problem)
@@ -295,7 +295,7 @@ def QAOA_Solution2(Diccionario):
     '''
     
     inicio = time.time()
-    sim = Aer.get_backend('aer_simulator_statevector_gpu')
+    sim = Aer.get_backend('aer_simulator_statevector')
     
     #sampler = QuantumInstance(backend=sim, shots=200)
     sampler = BackendSampler(sim)

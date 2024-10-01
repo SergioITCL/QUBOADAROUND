@@ -148,8 +148,8 @@ class QUBOAnnealer(IRoundOptimizer):
         )
         bias_s=input_s*kernel_s
         '''
-
-        '''
+        
+        inicio=time.time()
         DiccionarioT={}
         AdaInt=ADAInt(input_f,kernel,bias,output_f,input_s,kernel_s,bias_s)
         Redondeo_Kernel=np.zeros((AdaInt.output_dimension(),AdaInt.input_dimension()))
@@ -178,6 +178,7 @@ class QUBOAnnealer(IRoundOptimizer):
             
             diccionario_unido=AdaInt.unir_diccionarios(diccionario1,diccionario2,diccionario3,diccionario4,Dicionario)
             #AdaInt.matrix_calculation(M,diccionario1,diccionario2,diccionario3,diccionario4)
+            print(diccionario_unido)
             result=AdaInt.quantum_annealing(diccionario_unido)
             print(result)
             #result2=AdaInt.qaoa_solution(diccionario_unido)
@@ -185,10 +186,18 @@ class QUBOAnnealer(IRoundOptimizer):
         tensors=[Redondeo_Kernel,Redondeo_Bias]
         #print(tensors)
         #np.savetxt("input_ele1.csv", input_f, delimiter=",")
+        fin=time.time()
+        print("tiempo metodo 1")
+        print(fin-inicio)
+        inicio = time.time()
+        
 
-        '''
-      
 
+
+
+
+
+        inicio2=time.time()
         xdim=input_f[0].shape
         InputDimension=xdim[0]
         ydim=bias.shape
@@ -218,7 +227,7 @@ class QUBOAnnealer(IRoundOptimizer):
             Dicionario4={}
             diccionario4={}
             Dicionario={}
-            diccionario1=Bterm1_Calculation_Subespacio(Dicionario1,Bterm1,Input_Round2,dTermino2,l,InputDimension,Numero_datasets,kernel_s,input_s)
+            diccionario1=Bterm1_Calculation_Subespacio({},Bterm1,Input_Round2,dTermino2,l,InputDimension,Numero_datasets,kernel_s,input_s)
             #print(diccionario11)
             if l==0:
                 diccionario2,Bt2=Bterm2_Calculation_Subespacio(Dicionario2,Bterm2,Input_Round2,l,InputDimension,Numero_datasets,kernel_s,input_s)
@@ -232,7 +241,7 @@ class QUBOAnnealer(IRoundOptimizer):
                 diccionario4=Bterm_Calculation_Vuelta4(Dicionario4,Bt4,InputDimension,OutputDimension,l)
             #print(diccionario4)
             diccionarioM=Unir_Diccionarios(diccionario1,diccionario2,diccionario3,diccionario4,Dicionario)
-            
+            print(diccionarioM)
             max_abs_value_key = max(diccionarioM, key=lambda k: abs(diccionarioM[k]))
             fuerza=abs(diccionarioM[max_abs_value_key])
 
@@ -241,8 +250,8 @@ class QUBOAnnealer(IRoundOptimizer):
             #Matrix_Calculation(M,diccionario1,diccionario2,diccionario3,diccionario4, OutputDimension,InputDimension)
             result=Quantum_annealing_simulator(diccionarioM,fuerza)
             #print('result1',result)
-            result2=QAOA_Solution2(diccionarioM)
-            Redondeo_Kernel[l], Redondeo_Bias[l]=Tensor_Redondeo2(result2,Redondeo_Kernel,Redondeo_Bias,l,InputDimension)
+            #result2=QAOA_Solution2(diccionarioM)
+            Redondeo_Kernel[l], Redondeo_Bias[l]=Tensor_Redondeo(result,Redondeo_Kernel,Redondeo_Bias,l,InputDimension)
         #print('diccionario1',DiccionarioT)  
         #print(DiccionarioT)
         
@@ -251,7 +260,9 @@ class QUBOAnnealer(IRoundOptimizer):
         # Convertir la matriz en un vector
         
         tensors=[Redondeo_Kernel,Redondeo_Bias]
-        
+        fin2=time.time()
+        print("tiempo metodo ")
+        print(fin2-inicio2)
         
         return tensors
 
