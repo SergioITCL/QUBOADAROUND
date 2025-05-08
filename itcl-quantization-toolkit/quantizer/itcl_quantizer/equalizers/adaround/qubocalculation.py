@@ -1,4 +1,6 @@
 import time
+from itcl_quantization.quantization.operators import Quantization
+from itcl_quantizer.quantizer.distributions.distribution import Distribution
 import numpy as np
 import math
 import dimod
@@ -25,10 +27,7 @@ from qiskit.primitives import BackendSampler
 from qiskit.primitives import Sampler
 from qiskit_optimization import QuadraticProgram
 
-os.environ["QISKIT_MAXIMUM_MATRIX_SIZE"] = "500000"
-def suma(a,b):
-    c=a+b
-    return c
+
 def Input_Round_Calculation(Input,qinput_scale):
     '''Rounds to the nearest the dataset
 
@@ -60,7 +59,7 @@ def dterm_Calculation(Bias,Kernel,InputRound,Output,qkernel_scale,qinput_scale,q
     d=dc-ds.T
     return d
 
-def Bterm1_Calculation_Subespacio(Diccionario1,Bterm1,InputRound,dterm,Indice_del_subespacio,Dimension_Input,Numero_de_datasets,qkernel_scale,qinput_scale):
+def Bterm1_Calculation_Subespacio(Bterm1,InputRound,dterm,Indice_del_subespacio,Dimension_Input,Numero_de_datasets,qkernel_scale,qinput_scale):
     '''
     Calculates the coefficients of the first term of Bterm and stores them in a dictionary.
 
@@ -78,6 +77,7 @@ def Bterm1_Calculation_Subespacio(Diccionario1,Bterm1,InputRound,dterm,Indice_de
     Returns:
         A dictionary with the coefficients of the first term of Bterm.
     '''
+    Diccionario1={}
     for s in range(0,Numero_de_datasets):  
         Bterm1[s]=(qkernel_scale*qinput_scale)**2*(1/Numero_de_datasets)*InputRound[s]*(InputRound[s]-2*dterm[s][Indice_del_subespacio])
     Suma = np.sum(Bterm1, axis=0)
@@ -85,7 +85,7 @@ def Bterm1_Calculation_Subespacio(Diccionario1,Bterm1,InputRound,dterm,Indice_de
         Diccionario1[(Indice_del_subespacio*Dimension_Input+i+1,Indice_del_subespacio*Dimension_Input+i+1)]=Suma[i]
     return Diccionario1
 
-def Bterm2_Calculation_Subespacio(Diccionario2,Bterm2,InputRound,Indice_del_subespacio,Dimension_Input,Numero_de_datasets,qkernel_scale,qinput_scale):
+def Bterm2_Calculation_Subespacio(Bterm2,InputRound,Indice_del_subespacio,Dimension_Input,Numero_de_datasets,qkernel_scale,qinput_scale):
     '''
     Calculates the coefficients of the second term of Bterm and stores them in a dictionary.
 
@@ -103,6 +103,7 @@ def Bterm2_Calculation_Subespacio(Diccionario2,Bterm2,InputRound,Indice_del_sube
         Diccionario2, A dictionary with the coefficients of the second term of Bterm.
         Bt2, An auxiliar numpy array used in the following calculations
     '''  
+    Diccionario2={}
     for s in range(0, Numero_de_datasets):
         M=np.outer(InputRound[s].T,InputRound[s])
         
@@ -119,16 +120,18 @@ def Bterm2_Calculation_Subespacio(Diccionario2,Bterm2,InputRound,Indice_del_sube
                 Diccionario2[(Dimension_Input*Indice_del_subespacio +i+1,Dimension_Input*Indice_del_subespacio +j+1)]=Bt2[j+i*Dimension_Input]
     return Diccionario2,Bt2
 
-def Bterm_Calculation_Vuelta(Bt2,Diccionario2,Dimension_Input,Indice_del_subespacio):
+def Bterm_Calculation_Vuelta(Bt2,Dimension_Input,Indice_del_subespacio):
+    Diccionario2={}
     for i in range(0,Dimension_Input):
         for j in range(0,Dimension_Input):
             if Bt2[j+i*Dimension_Input]==0:
                 continue
             else:
                 Diccionario2[(Dimension_Input*Indice_del_subespacio +i+1,Dimension_Input*Indice_del_subespacio +j+1)]=Bt2[j+i*Dimension_Input]
+    
     return Diccionario2
 
-def Bterm3_Calculation_Subespacio(Diccionario3,Bterm3,dterm,Indice_del_subespacio,Dimension_Input,Dimension_Output,SB,SX,SW,Numero_de_datasets):
+def Bterm3_Calculation_Subespacio(Bterm3,dterm,Indice_del_subespacio,Dimension_Input,Dimension_Output,SB,SX,SW,Numero_de_datasets):
     '''
     Calculates the coefficients of the third term of Bterm and stores them in a dictionary.
 
@@ -146,12 +149,14 @@ def Bterm3_Calculation_Subespacio(Diccionario3,Bterm3,dterm,Indice_del_subespaci
     Returns:
         A dictionary with the coefficients of the first term of Bterm.
     '''
+    Diccionario3={}
     Bterm3 = (SX*SW)**2*(1/Numero_de_datasets)*(SB/(SX*SW))*((SB/(SX*SW))-2*dterm[:,Indice_del_subespacio])
     Bt3 = np.sum(Bterm3, axis=0)
     Diccionario3[(Dimension_Input*Dimension_Output+1+Indice_del_subespacio,Dimension_Input*Dimension_Output+1+Indice_del_subespacio)] = Bt3
     return Diccionario3
 
-def Bterm4_Calculation_Subespacio(Diccionario4,Bterm4,InputRound,Indice_del_subespacio,Dimension_Input,Dimension_Output,SB,SX,SW,Numero_de_datasets):
+def Bterm4_Calculation_Subespacio(Bterm4,InputRound,Indice_del_subespacio,Dimension_Input,Dimension_Output,SB,SX,SW,Numero_de_datasets):
+    Diccionario4={}
     for s in range(0,Numero_de_datasets):
         Bterm4[s]=(SW*SX)**2*(1/Numero_de_datasets)*(SB/(SX*SW))*InputRound[s]
     Bt4 = np.sum(Bterm4, axis=0)
@@ -164,7 +169,8 @@ def Bterm4_Calculation_Subespacio(Diccionario4,Bterm4,InputRound,Indice_del_sube
             Diccionario4[(Dimension_Input*Dimension_Output+1+Indice_del_subespacio,Indice_del_subespacio*Dimension_Input+i+1)]=Bt4[i]
     return Diccionario4,Bt4
 
-def Bterm_Calculation_Vuelta4(Diccionario4,Bt4,Dimension_Input,Dimension_Output,Indice_del_subespacio):
+def Bterm_Calculation_Vuelta4(Bt4,Dimension_Input,Dimension_Output,Indice_del_subespacio):
+    Diccionario4={}
     for i in range(0,Dimension_Input):
         if Bt4[i]==0: 
             continue
@@ -176,52 +182,45 @@ def Bterm_Calculation_Vuelta4(Diccionario4,Bt4,Dimension_Input,Dimension_Output,
 
 
 
-def Quantum_annealing_simulator(Diccionario,fuerza):
+def Quantum_annealing_simulator(Diccionario,qubo_sampler,dwave_num_reads,dwave_annealing_time,fuerza):
     J=Diccionario
+ 
     h={}
     problem = dimod.BinaryQuadraticModel(h, J, 0.0, dimod.BINARY)
-    '''
-    api_key = 'DEV-7b109dc644fbeace8c45e5c9e7bbb3849be1983b'
-    
-    sampler2 = EmbeddingComposite(DWaveSampler(token=api_key))
-    problem = dimod.BinaryQuadraticModel(h, J, 0.0, dimod.BINARY)
-    #print(problem)
-    print('cuantico1 con strenght')
-    
-    result2 = sampler2.sample(problem, num_reads=30,annealing_time=20,chain_strength=fuerza)
-    print(result2)
-    '''
-    
-    
-    '''
-    result4 = sampler2.sample(problem, num_reads=30,annealing_time=100)
-    print('cuantico4 sin strength')
-    print(result4)
-    '''
-    #solver = greedy.SteepestDescentSolver()
-    #result = solver.sample(problem, num_reads = 50)
-    #print('dwave')
-    #print('SteepestDEscentSolver')
-    #print(result)
-    
-    
-    solver = neal.SimulatedAnnealingSampler()
-    result3 = solver.sample(problem)
-    print(result3)
-    '''
-    solver = LeapHybridSampler(token=api_key)
-    result4=solver.sample(problem)
-    print('hybrid')
-    print(result4)
-    '''
+    api_key = 'DEV-caa8e3d0f6dbfb0175cf148a15109b11979d3329'
+    if qubo_sampler == "dwave":
+        
+        
+        sampler = EmbeddingComposite(DWaveSampler(token=api_key))
+        if fuerza == 0:
+            result = sampler.sample(problem, num_reads=dwave_num_reads,annealing_time=dwave_annealing_time)
+        else:
+            result = sampler.sample(problem, num_reads=dwave_num_reads,annealing_time=dwave_annealing_time,chain_strength=fuerza)
 
-    #solver2 = dimod.ExactSolver()
-    #response = solver2.sample(problem)
-    #min_energy_sample = next(response.samples())
-    #min_energy = next(response.data()).energy
-    #print(min_energy_sample,min_energy)
-    
-    return result3
+
+    elif qubo_sampler == "neal":
+
+        solver = neal.SimulatedAnnealingSampler()
+        result = solver.sample(problem)
+
+  
+
+    elif qubo_sampler =="hybrid":
+        solver = LeapHybridSampler(token=api_key)
+        result=solver.sample(problem)
+
+
+    elif qubo_sampler == "brute_force":
+        a=1
+        #solver2 = dimod.ExactSolver()
+        #response = solver2.sample(problem)
+        #min_energy_sample = next(response.samples())
+        #min_energy = next(response.data()).energy
+        #print(min_energy_sample,min_energy)
+    else:
+        raise ValueError(f"Sampler '{qubo_sampler}' no reconocido.")
+
+    return result
 
 
 def Unir_Diccionarios(Diccionario1,Diccionario2,Diccionario3,Diccionario4,Diccionario):
@@ -236,6 +235,7 @@ def Unir_Diccionarios(Diccionario1,Diccionario2,Diccionario3,Diccionario4,Diccio
     Return:
         A dictionary storing all the coefficients of the B-term calculation.
     '''
+
     Diccionario.update(Diccionario1)
     Diccionario.update(Diccionario2)
     Diccionario.update(Diccionario3)
@@ -268,14 +268,15 @@ def Tensor_Redondeo2 (Resultado_QAOA,Resultado_Annealing_pesos,Resultado_Anneali
     Resultado_Annealing_bias[Indice_del_subespacio]=Dmin[Dimension_Input]
     return Resultado_Annealing_pesos[Indice_del_subespacio],Resultado_Annealing_bias[Indice_del_subespacio]
 
-def QAOA_Solution2(Diccionario):
+def QAOA_Solution2(Diccionario,num_reps):
+    print(num_reps)
     Indice_Maximo = max(max(key) for key in Diccionario)
     Diccionario_Primado={}
     for i in range(0,Indice_Maximo+1):
         for j in range(0,Indice_Maximo+1):
             if (i,j) in Diccionario:
                 Diccionario_Primado[(f'{i}',f'{j}')]=Diccionario[(i,j)]
-    #print(Diccionario_Primado)
+ 
     
     qp = QuadraticProgram()
     for i in range(1,Indice_Maximo):
@@ -283,26 +284,15 @@ def QAOA_Solution2(Diccionario):
             qp.binary_var(f'{i}')
     qp.binary_var(f'{Indice_Maximo}')
     qp.minimize(quadratic = Diccionario_Primado)
-    #print(qp.export_as_lp_string())
 
-    '''
-    np_solver = NumPyMinimumEigensolver()
-    np_optimizer = MinimumEigenOptimizer(np_solver)
-    result = np_optimizer.solve(qp)
-    res1=np.array(result.x)
-    print('precise')
-    print(result)
-    '''
-    
+
+
     inicio = time.time()
-    sim = Aer.get_backend('aer_simulator_statevector')
-    
-    #sampler = QuantumInstance(backend=sim, shots=200)
+    sim = Aer.get_backend('aer_simulator_statevector_gpu')
     sampler = BackendSampler(sim)
-    #sampler=Sampler()
-    #sim = AerSimulator(method='statevector’, device='GPU')
     spsa = SPSA(maxiter=250)
-    qaoa = QAOA(sampler=sampler, optimizer=spsa, reps=3)
+    qaoa = QAOA(sampler=sampler, optimizer=spsa, reps=num_reps)
+
     qaoa_optimizer = MinimumEigenOptimizer(qaoa)
     result2 = qaoa_optimizer.solve(qp)
     res2 = np.array(result2.x)
@@ -310,23 +300,30 @@ def QAOA_Solution2(Diccionario):
     print(result2)
     fin = time.time()
     print('tiempo gpu',fin-inicio)
-    '''
-    inicio = time.time()
-    sim = Aer.get_backend('aer_simulator_statevector')
-    #sampler = QuantumInstance(backend=sim, shots=200)
-    sampler = BackendSampler(sim)
-    #sampler=Sampler()
-    #sim = AerSimulator(method='statevector’, device='GPU')
-    spsa = SPSA(maxiter=250)
-    qaoa = QAOA(sampler=sampler, optimizer=spsa, reps=1)
-    qaoa_optimizer = MinimumEigenOptimizer(qaoa)
-    result2 = qaoa_optimizer.solve(qp)
-    res2 = np.array(result2.x)
-    print('QAOA')
-    print(result2)
-    fin = time.time()
-    
-    print('tiempo cpu',fin-inicio)
-    '''
+
     return res2
 
+
+def random_qubo_problem(number_variables):
+    np.random.seed(42)
+    kernel = np.random.normal( 0,1, size=(10,number_variables))
+    bias = np.random.normal( -1,1, size=(10,))
+    input_f = np.random.exponential(1,size=(1000, number_variables))
+
+    output_f = np.zeros((input_f.shape[0], bias.shape[0]))
+    for i in range(0,input_f[:,0].shape[0]):
+        output_f[i]=kernel.dot(input_f[i])+bias
+
+    q2_kernel = Quantization('int8')
+    kernel_dist = Distribution(kernel)
+
+    kernel_s, w_zpk = kernel_dist.quantize(q2_kernel,
+        force_zp=0, symmetric=False
+    )
+    q2_input = Quantization('int8')
+    input_dist= Distribution(input_f)
+    input_s, w_zpi = input_dist.quantize(q2_input, symmetric=False
+    )
+    bias_s=input_s*kernel_s
+
+    return kernel,bias,input_f,output_f, kernel_s,input_s,bias_s

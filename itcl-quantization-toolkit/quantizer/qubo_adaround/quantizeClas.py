@@ -29,7 +29,7 @@ def main():
     
     model = load_model(f"{_PARENT}/models/model.h5")
     inicio = time()
-    los,accuracy = model.evaluate(x_test, y_test, verbose=2) # type: ignore
+    los,accuracy = model.evaluate(x_test[1000:], y_test[1000:], verbose=2) # type: ignore
     fin = time()
     print('tiempo de inferencia sin cuantizar',fin-inicio)
     print('accuracy',accuracy)
@@ -51,7 +51,7 @@ def main():
     cfg = QuantizerCfg()
     cfg.dense.kernel_dtype = "int2"
 
-    cfg.ada_round_net = RoundingQUBOCfg()  # set the rounding optimizer
+    cfg.ada_round_net = RoundingQUBOCfg(qubo_sampler="neal", random_adaround_coefficients=False)  # set the rounding optimizer
     
     t = time()
     net = build(

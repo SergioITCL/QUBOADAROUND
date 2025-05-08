@@ -136,12 +136,15 @@ class ADAInt:
         return diccionario2,Bt2 
 
     def bterm2_calculation_repeticion(self,Bt2, diccionario2,indice_del_subespacio):
-        for i in range(0,self.input_dimension()):
-            for j in range(0,self.input_dimension()):
-                if Bt2[j+i*self.input_dimension()]==0:
+
+        input_dimension=self.input_dimension()
+        for i in range(0,input_dimension):
+            for j in range(0,input_dimension):
+                if Bt2[j+i*input_dimension]==0:
                     continue
                 else:
-                    diccionario2[(self.input_dimension()*indice_del_subespacio +i+1,self.input_dimension()*indice_del_subespacio +j+1)]=Bt2[j+i*self.input_dimension()]
+                    diccionario2[(input_dimension*indice_del_subespacio +i+1,input_dimension*indice_del_subespacio +j+1)]=Bt2[j+i*input_dimension]
+
         return diccionario2           
     
     def bterm3_calculation_subespacio(self,diccionario3,indice_del_subespacio):
@@ -183,12 +186,14 @@ class ADAInt:
         return diccionario4,Bt4
     
     def bterm4_calculation_repeticion(self,diccionario4,bt4,indice_del_subespacio):
-        for i in range(0,self.input_dimension()):
+        input_dimension=self.input_dimension()
+        output_dimension=self.output_dimension()
+        for i in range(0,input_dimension):
             if bt4[i]==0:
                 continue
             else:
-                diccionario4[(indice_del_subespacio*self.input_dimension()+i+1,self.input_dimension()*self.output_dimension()+1+indice_del_subespacio)]=bt4[i]
-                diccionario4[(self.input_dimension()*self.output_dimension()+1+indice_del_subespacio,indice_del_subespacio*self.input_dimension()+i+1)]=bt4[i]
+                diccionario4[(indice_del_subespacio*input_dimension+i+1,input_dimension*output_dimension+1+indice_del_subespacio)]=bt4[i]
+                diccionario4[(input_dimension*output_dimension+1+indice_del_subespacio,indice_del_subespacio*input_dimension+i+1)]=bt4[i]
         return diccionario4
     
     def quantum_annealing(self,diccionario):

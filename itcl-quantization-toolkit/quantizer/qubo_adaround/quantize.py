@@ -22,7 +22,7 @@ def main():
 
     # scale mnist
     x_test = x_test.astype("float32") / 255
-    x_test = np.array([tf.image.resize(np.expand_dims(image, axis=-1), (5, 5)).numpy() for image in x_test]) # type: ignore
+    x_test = np.array([tf.image.resize(np.expand_dims(image, axis=-1), (7, 7)).numpy() for image in x_test]) # type: ignore
     # flatten mnist
     x_test = x_test.reshape(x_test.shape[0], -1)
     print(x_test.shape)

@@ -4,6 +4,7 @@ import json
 from abc import ABCMeta, abstractmethod
 from pathlib import Path
 from typing import Literal
+from typing import Union
 
 import yaml
 from pydantic import BaseModel as BaseModel_
@@ -53,10 +54,46 @@ class RoundingAnnealerCfg(BaseModel, IBuildable):
 
 
 class RoundingQUBOCfg(BaseModel, IBuildable):
+    
     optimizer: Literal["qubo"] = "qubo"
+    random_adaround_coefficients : bool 
+    qubo_sampler: Literal["neal", "qaoa", "dwave", "hybrid", "brute_force"] 
+    qaoa_num_reps: int = 1
+    dwave_num_reads : int = 30
+    dwave_annealing_time : int = 20
+    dwave_chain_strength: Union[int, Literal["max"]] = 0
+    dictionary_subspace: bool = False
+    random_qubo_num_variables : Union[bool, int] = False
+
+    def __init__(self, 
+                 random_adaround_coefficients: bool = False,
+                 qubo_sampler: Literal["neal", "qaoa", "dwave", "hybrid"] = "neal",
+                 qaoa_num_reps: int = 1,
+                 dwave_num_reads : int = 30,
+                 dwave_annealing_time : int = 20,
+                 dwave_chain_strength: Union[int, Literal["max"]] = 0,
+                 dictionary_subspace: bool = False,
+                 random_qubo_num_variables : Union[bool, int] = False):
+
+        super().__init__(random_adaround_coefficients = random_adaround_coefficients,
+                         qubo_sampler = qubo_sampler,
+                         qaoa_num_reps = qaoa_num_reps,
+                         dwave_num_reads = dwave_num_reads,
+                         dwave_annealing_time = dwave_annealing_time,
+                         dwave_chain_strength = dwave_chain_strength,
+                         dictionary_subspace = dictionary_subspace,
+                         random_qubo_num_variables = random_qubo_num_variables)
+        
 
     def build(self):
-        return QUBOAnnealer()
+        return QUBOAnnealer(self.random_adaround_coefficients,
+                             self.qubo_sampler,
+                             self.qaoa_num_reps,
+                             self.dwave_num_reads,
+                             self.dwave_annealing_time,
+                             self.dwave_chain_strength, 
+                             self.dictionary_subspace,
+                             self.random_qubo_num_variables)
 
 
 class RoundingMinimaCfg(BaseModel, IBuildable):
