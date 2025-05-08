@@ -1,27 +1,16 @@
 from typing import TYPE_CHECKING, List, Tuple
 from itcl_quantization.quantization.operators import Quantization
-from itcl_quantizer.equalizers.adaround.Calculationsint import ADAInt
-from itcl_quantizer.quantizer.distributions.distribution import Distribution
-import tensorflow as tf
 import numpy as np
-import math
-import csv
-import matplotlib.pyplot as plt
-import dimod
+
 from typing import Union
-import greedy
-import time
-from dwave.system import DWaveSampler
-from dwave.system import EmbeddingComposite
+
 from itcl_quantizer.equalizers.adaround.iround_optimizer import IRoundOptimizer
 from itcl_quantizer.tensor_extractor.abstract_layer import (
     AbstractLayer,
     QuantizationResult,
 )
-from itcl_quantizer.tensor_extractor.keras.utils import CheckType
 from itcl_quantizer.equalizers.adaround.qubocalculation import *
 from typing import cast
-from itcl_quantizer.tensor_extractor.tensor import NodeTensorTensor
 if TYPE_CHECKING:
     from itcl_quantizer.tensor_extractor.keras.layers.keras_dense import KerasDense
 
@@ -178,8 +167,8 @@ class QUBOAnnealer(IRoundOptimizer):
                         Redondeo_Kernel[l], Redondeo_Bias[l]=Tensor_Redondeo(result,Redondeo_Kernel,Redondeo_Bias,l,InputDimension)
 
             tensors=[Redondeo_Kernel,Redondeo_Bias]
-            
-            
+                
+                
             return tensors
 
     def optimize(self) -> Tuple[List[np.ndarray], float]:

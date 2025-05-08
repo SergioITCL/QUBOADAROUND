@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 from tensorflow import keras
 from keras.models import load_model
 from time import time
-#import time
+
 
 from itcl_quantizer.config.models.keras import QuantizerCfg, RoundingQUBOCfg
 from itcl_quantizer.config.models.keras import RoundingAnnealerCfg
@@ -23,17 +23,14 @@ def main():
 
 
     data = x_test[:1000]  # first 1000 samples
-    datax = x_test[:1000]  # first 1000 samples
-    datay = y_test[:1000]  # first 1000 samples
-    
-    
+  
     model = load_model(f"{_PARENT}/models/model.h5")
     inicio = time()
     los,accuracy = model.evaluate(x_test[1000:], y_test[1000:], verbose=2) # type: ignore
     fin = time()
     print('tiempo de inferencia sin cuantizar',fin-inicio)
     print('accuracy',accuracy)
-    
+
 
     def accuracy(net: Network) -> float:
         inicio = time()

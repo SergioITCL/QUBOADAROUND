@@ -9,9 +9,9 @@ import greedy
 import neal
 import pytest
 
-from dwave.system import DWaveSampler, EmbeddingComposite
-from dwave.system import LeapHybridSampler
-from dwave.inspector import show
+# from dwave.system import DWaveSampler, EmbeddingComposite
+# from dwave.system import LeapHybridSampler
+# from dwave.inspector import show
 
 import qiskit
 from qiskit import QuantumCircuit, transpile
@@ -184,7 +184,7 @@ def Bterm_Calculation_Vuelta4(Bt4,Dimension_Input,Dimension_Output,Indice_del_su
 
 def Quantum_annealing_simulator(Diccionario,qubo_sampler,dwave_num_reads,dwave_annealing_time,fuerza):
     J=Diccionario
- 
+
     h={}
     problem = dimod.BinaryQuadraticModel(h, J, 0.0, dimod.BINARY)
     api_key = 'DEV-caa8e3d0f6dbfb0175cf148a15109b11979d3329'
