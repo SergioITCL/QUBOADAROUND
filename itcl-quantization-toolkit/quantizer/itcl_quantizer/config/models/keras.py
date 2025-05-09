@@ -12,7 +12,7 @@ from pydantic import Field
 from typing_extensions import Self
 
 from itcl_quantizer.equalizers.adaround.annealer import RoundingAnnealer
-from itcl_quantizer.equalizers.adaround.qubo import QUBOAnnealer
+from qubo_adaround.qubo import QUBOAnnealer
 
 
 class Init(metaclass=ABCMeta):
@@ -57,6 +57,7 @@ class RoundingQUBOCfg(BaseModel, IBuildable):
     
     optimizer: Literal["qubo"] = "qubo"
     random_adaround_coefficients : bool 
+    cuantization_to_round_nearest : bool
     qubo_sampler: Literal["neal", "qaoa", "dwave", "hybrid", "brute_force"] 
     qaoa_num_reps: int = 1
     dwave_num_reads : int = 30
@@ -67,6 +68,7 @@ class RoundingQUBOCfg(BaseModel, IBuildable):
 
     def __init__(self, 
                  random_adaround_coefficients: bool = False,
+                 cuantization_to_round_nearest : bool = False,
                  qubo_sampler: Literal["neal", "qaoa", "dwave", "hybrid"] = "neal",
                  qaoa_num_reps: int = 1,
                  dwave_num_reads : int = 30,
@@ -76,6 +78,7 @@ class RoundingQUBOCfg(BaseModel, IBuildable):
                  random_qubo_num_variables : Union[bool, int] = False):
 
         super().__init__(random_adaround_coefficients = random_adaround_coefficients,
+                         cuantization_to_round_nearest = cuantization_to_round_nearest,
                          qubo_sampler = qubo_sampler,
                          qaoa_num_reps = qaoa_num_reps,
                          dwave_num_reads = dwave_num_reads,
@@ -87,6 +90,7 @@ class RoundingQUBOCfg(BaseModel, IBuildable):
 
     def build(self):
         return QUBOAnnealer(self.random_adaround_coefficients,
+                            self.cuantization_to_round_nearest,
                              self.qubo_sampler,
                              self.qaoa_num_reps,
                              self.dwave_num_reads,

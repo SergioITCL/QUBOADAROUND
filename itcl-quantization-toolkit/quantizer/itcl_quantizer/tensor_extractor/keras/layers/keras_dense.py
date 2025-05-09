@@ -9,7 +9,7 @@ from tensorflow import keras
 from itcl_quantizer.equalizers.adaround.adaround import AdaRound
 from itcl_quantizer.equalizers.adaround.iround_optimizer import IRoundOptimizer
 from itcl_quantizer.equalizers.adaround.irounding_policy import IRoundingPolicy
-from itcl_quantizer.equalizers.adaround.qubo import QUBOAnnealer
+from qubo_adaround.qubo import QUBOAnnealer
 from itcl_quantizer.equalizers.eq_bundler import NodeBundler
 from itcl_quantizer.equalizers.param_equalizer.abstract_param_optimizer import (
     AbstractParamOptimizer,

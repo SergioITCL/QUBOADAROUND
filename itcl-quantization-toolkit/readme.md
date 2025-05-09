@@ -39,6 +39,10 @@ Para ejecutar uno de los cuantizadores usaremos el comando:
 ```bash
 poetry run python ./quantize_mnist.py
 ```
+### Ejecutar el cuantizador de ADAROUND
+
+Para poder utilizar el cuantizador adaround se deberá dirigir a la carpeta de qubo_adaround, introducir el modelo y los datos a cuantizar, y en main modificar los parámetros que se deseen emplear en la computación.
+Para ejecutar el script hacer poetry run python main.py desde la carpeta de qubo_adaround
 
 ### Otros Comandos
 
